@@ -35,7 +35,12 @@ public interface Controller {
      * Will be called after the Node has been loaded, after setParent has been
      * called. Initialisation code for the controller can be placed here.
      */
-    default void init() {
+    default void onLoad() {
+        //Do nothing by default.
+    }
+
+    default void onDisplay() {
+        //Do nothing by default.
     }
 
 }

@@ -62,7 +62,7 @@ public class StagerBuilder {
         final ScreenLoader screenLoader = new ScreenLoader(nodeSwapper);
         for (Map.Entry<String, String> entry : screensMap.entrySet()) {
             final LoadedScreen loadedScreen = screenLoader.load(entry.getValue());
-            nodeSwapper.putNode(entry.getKey(), loadedScreen.getNode());
+            nodeSwapper.putLoadedScreen(entry.getKey(), loadedScreen);
             controllerCallback.ifPresent((callback) -> callback.accept(loadedScreen.getController()));
         }
         initialValue.ifPresent(nodeSwapper::setScreen);

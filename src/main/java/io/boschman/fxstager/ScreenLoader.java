@@ -49,7 +49,7 @@ public class ScreenLoader {
         final Parent node = loader.<Parent>load();
         final Controller controller = loader.<Controller>getController();
         controller.setParent(parent);
-        controller.init();
+        controller.onLoad();
         return new LoadedScreen(node, controller);
     }
 

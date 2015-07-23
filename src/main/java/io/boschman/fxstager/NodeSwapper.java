@@ -24,7 +24,6 @@ import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.beans.property.DoubleProperty;
 import javafx.event.ActionEvent;
-import javafx.scene.Node;
 import javafx.util.Duration;
 
 /**
@@ -35,14 +34,14 @@ import javafx.util.Duration;
  */
 public class NodeSwapper extends Stager {
 
-    private final Map<String, Node> nodes = new HashMap<>();
+    private final Map<String, LoadedScreen> loadedScreens = new HashMap<>();
 
-    public void putNode(String id, Node node) {
-        this.nodes.put(id, node);
+    public void putLoadedScreen(String id, LoadedScreen loadedScreen) {
+        this.loadedScreens.put(id, loadedScreen);
     }
 
-    public Node getNode(String id) {
-        return nodes.get(id);
+    public LoadedScreen getLoadedScreen(String id) {
+        return loadedScreens.get(id);
     }
 
     /**
@@ -58,7 +57,7 @@ public class NodeSwapper extends Stager {
     @Override
     public boolean setScreen(final String type) {
         //TODO: Make transition effects customizable.
-        if (!nodes.containsKey(type)) {
+        if (!loadedScreens.containsKey(type)) {
             return false;
         }
 
@@ -68,7 +67,8 @@ public class NodeSwapper extends Stager {
                     new KeyFrame(Duration.ZERO, new KeyValue(opacity, 1.0)),
                     new KeyFrame(new Duration(500), (ActionEvent t) -> {
                         getChildren().remove(0);
-                        getChildren().add(0, getNode(type));
+                        getChildren().add(0, getLoadedScreen(type).getNode());
+                        getLoadedScreen(type).getController().onDisplay();
                         Timeline fadeIn = new Timeline(
                                 new KeyFrame(Duration.ZERO, new KeyValue(opacity, 0.0)),
                                 new KeyFrame(new Duration(1000), new KeyValue(opacity, 1.0)));
@@ -77,7 +77,8 @@ public class NodeSwapper extends Stager {
             fade.play();
         } else {
             setOpacity(0.0);
-            getChildren().add(getNode(type));
+            getChildren().add(getLoadedScreen(type).getNode());
+            getLoadedScreen(type).getController().onDisplay();
             Timeline fadeIn = new Timeline(
                     new KeyFrame(Duration.ZERO, new KeyValue(opacity, 0.0)),
                     new KeyFrame(new Duration(1500), new KeyValue(opacity, 1.0)));
