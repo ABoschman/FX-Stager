@@ -15,12 +15,15 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package io.boschman.fxstager;
+package io.boschman.fxstager.screens;
 
+import io.boschman.fxstager.loading.LoadedNode;
+import io.boschman.fxstager.loading.Loader;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Consumer;
+import javafx.scene.Node;
 
 /**
  *
@@ -59,10 +62,11 @@ public class StagerBuilder {
 
     public Stager create() {
         final NodeSwapper nodeSwapper = new NodeSwapper();
-        final ScreenLoader screenLoader = new ScreenLoader(nodeSwapper);
         for (Map.Entry<String, String> entry : screensMap.entrySet()) {
-            final LoadedScreen loadedScreen = screenLoader.load(entry.getValue());
+            final LoadedNode<Node, Controller> loadedScreen = Loader.load(entry.getValue());
             nodeSwapper.putLoadedScreen(entry.getKey(), loadedScreen);
+            loadedScreen.getController().setParent(nodeSwapper);
+            loadedScreen.getController().onLoad();
             controllerCallback.ifPresent((callback) -> callback.accept(loadedScreen.getController()));
         }
         initialValue.ifPresent(nodeSwapper::setScreen);

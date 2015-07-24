@@ -15,15 +15,27 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package io.boschman.fxstager;
-
-import javafx.scene.Group;
+package io.boschman.fxstager.loading;
 
 /**
+ * Indicates a failure to load a GUI screen. Often wraps an IOExcepion.
  *
  * @author Arjan Boschman
  */
-public abstract class Stager extends Group {
+public class ScreenLoaderException extends RuntimeException {
 
-    public abstract boolean setScreen(String key);
+    private static final long serialVersionUID = 1L;
+
+    public ScreenLoaderException(String message) {
+        super(message);
+    }
+
+    public ScreenLoaderException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public ScreenLoaderException(Throwable cause) {
+        super(cause);
+    }
+
 }

@@ -15,7 +15,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package io.boschman.fxstager;
+package io.boschman.fxstager.screens;
 
 /**
  * A GUI controller interface.
@@ -39,6 +39,10 @@ public interface Controller {
         //Do nothing by default.
     }
 
+    /**
+     * Will be called when the Node every time the Node is added to the scene.
+     * In other words; every time this screen is set as the active screen.
+     */
     default void onDisplay() {
         //Do nothing by default.
     }

@@ -15,8 +15,9 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package io.boschman.fxstager;
+package io.boschman.fxstager.screens;
 
+import io.boschman.fxstager.loading.LoadedNode;
 import java.util.HashMap;
 import java.util.Map;
 import javafx.animation.KeyFrame;
@@ -24,6 +25,7 @@ import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.beans.property.DoubleProperty;
 import javafx.event.ActionEvent;
+import javafx.scene.Node;
 import javafx.util.Duration;
 
 /**
@@ -34,14 +36,22 @@ import javafx.util.Duration;
  */
 public class NodeSwapper extends Stager {
 
-    private final Map<String, LoadedScreen> loadedScreens = new HashMap<>();
+    private final Map<String, LoadedNode<Node, Controller>> loadedScreens = new HashMap<>();
 
-    public void putLoadedScreen(String id, LoadedScreen loadedScreen) {
+    public void putLoadedScreen(String id, LoadedNode<Node, Controller> loadedScreen) {
         this.loadedScreens.put(id, loadedScreen);
     }
 
-    public LoadedScreen getLoadedScreen(String id) {
+    public LoadedNode<Node, Controller> getLoadedScreen(String id) {
         return loadedScreens.get(id);
+    }
+
+    public Node getNode(String id) {
+        return loadedScreens.get(id).getNode();
+    }
+
+    public Controller getController(String id) {
+        return loadedScreens.get(id).getController();
     }
 
     /**
@@ -67,8 +77,8 @@ public class NodeSwapper extends Stager {
                     new KeyFrame(Duration.ZERO, new KeyValue(opacity, 1.0)),
                     new KeyFrame(new Duration(500), (ActionEvent t) -> {
                         getChildren().remove(0);
-                        getChildren().add(0, getLoadedScreen(type).getNode());
-                        getLoadedScreen(type).getController().onDisplay();
+                        getChildren().add(0, getNode(type));
+                        getController(type).onDisplay();
                         Timeline fadeIn = new Timeline(
                                 new KeyFrame(Duration.ZERO, new KeyValue(opacity, 0.0)),
                                 new KeyFrame(new Duration(1000), new KeyValue(opacity, 1.0)));
@@ -77,8 +87,8 @@ public class NodeSwapper extends Stager {
             fade.play();
         } else {
             setOpacity(0.0);
-            getChildren().add(getLoadedScreen(type).getNode());
-            getLoadedScreen(type).getController().onDisplay();
+            getChildren().add(0, getNode(type));
+            getController(type).onDisplay();
             Timeline fadeIn = new Timeline(
                     new KeyFrame(Duration.ZERO, new KeyValue(opacity, 0.0)),
                     new KeyFrame(new Duration(1500), new KeyValue(opacity, 1.0)));

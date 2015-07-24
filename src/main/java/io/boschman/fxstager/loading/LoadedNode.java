@@ -15,21 +15,22 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package io.boschman.fxstager;
+package io.boschman.fxstager.loading;
 
-import javafx.scene.Parent;
+import javafx.scene.Node;
 
 /**
- * Immutable data class. Wraps both the {@link Parent} and the
- * {@link Controller}
- * belonging to a certain screen or GUI element.
+ * Immutable data class. Wraps both the Node and the controller belonging to a
+ * certain screen or GUI element.
  *
  * @author Arjan Boschman
+ * @param <N> The type of root node.
+ * @param <C> The type of controller belonging to the node.
  */
-public class LoadedScreen {
+public class LoadedNode<N extends Node, C> {
 
-    private final Parent node;
-    private final Controller controller;
+    private final N node;
+    private final C controller;
 
     /**
      * Constructs a new LoadedScreen. Basically just wraps a node and a
@@ -38,7 +39,7 @@ public class LoadedScreen {
      * @param node       The Parent tied to this GUI element.
      * @param controller The controller tied to this GUI element.
      */
-    public LoadedScreen(Parent node, Controller controller) {
+    public LoadedNode(N node, C controller) {
         this.node = node;
         this.controller = controller;
     }
@@ -46,14 +47,14 @@ public class LoadedScreen {
     /**
      * @return Gets the Node tied to this GUI element.
      */
-    public Parent getNode() {
+    public N getNode() {
         return node;
     }
 
     /**
      * @return Gets the controller tied to this GUI element.
      */
-    public Controller getController() {
+    public C getController() {
         return controller;
     }
 
